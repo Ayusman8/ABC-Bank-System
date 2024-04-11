@@ -1,0 +1,94 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- <context:component-scan base-package="com.abcbanksystem.models.*"> 
+		</context:component-scan> <context:annotation-config> </context:annotation-config> -->
+
+	<bean id="account" class="com.abcbankingsystem.models.Account">
+		<property name="runningTotals" value="1"></property>
+		<property name="openDate" value="11-04-2024"></property>
+
+	</bean>
+
+	<bean id="customer" class="com.abcbankingsystem.models.Customer">
+		<property name="accountNumber" value="100050567494"></property>
+		<property name="name" value="Ayusman Panda"></property>
+		<property name="address" value="Walls street, NY"></property>
+		<property name="contactNumber" value="9348762554"></property>
+		<property name="email" value="abc@gmail.com"></property>
+		<property name="password" value="123456"></property>
+	</bean>
+
+	<bean id="transaction"
+		class="com.abcbankingsystem.models.Transaction">
+		<property name="amount" value="5000.00"></property>
+		<property name="timeStamp" value="11-04-2024 14:01:264"></property>
+		<property name="sender" value="100050567494"></property>
+		<property name="receiver" value="100050567500"></property>
+	</bean>
+
+	<bean id="menu" class="com.abcbankingsystem.models.Menu">
+		<property name="transactionList">
+			<list>
+				<ref bean="directDebit"></ref>
+				<ref bean="externalTransaction"></ref>
+			</list>
+		</property>
+		<property name="customerAccountList">
+			<list>
+				<ref bean="currentAccount"></ref>
+				<ref bean="savingsAccount"></ref>
+			</list>
+		</property>
+		<property name="customerList">
+			<list>
+				<ref bean="individual"></ref>
+				<ref bean="corporate"></ref>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="directDebit"
+		class="com.abcbankingsystem.models.DirectDebit" parent="transaction">
+		<property name="paymentDate" value="11-04-2024"></property>
+	</bean>
+
+	<bean id="externalTransaction"
+		class="com.abcbankingsystem.models.ExternalTransaction"
+		parent="Transaction">
+		<property name="branchName" value="ABC Bank, NY"></property>
+		<property name="branchAddress" value="TimeSquare, NY"></property>
+		<property name="branchPostCode" value="15-700154"></property>
+		<property name="branchCode" value="700154"></property>
+
+	</bean>
+
+	<bean id="individual"
+		class="com.abcbankingsystem.models.Individual" parent="customer">
+		<property name="surname" value="Panda"></property>
+		<property name="gender" value="Male"></property>
+		<property name="dateOfBirth" value="15-04-2000"></property>
+
+	</bean>
+
+	<bean id="corporate" class="com.abcbankingsystem.models.Corporate"
+		parent="customer">
+		<property name="companyType" value="HealthCare"></property>
+	</bean>
+
+	<bean id="savingsAccount"
+		class="com.abcbankingsystem.models.SavingsAccount" parent="account">
+		<property name="intrestRate" value="8.11"></property>
+	</bean>
+
+	<bean id="currentAccount"
+		class="com.abcbankingsystem.models.CurrentAccount" parent="account">
+		<property name="overDraftLimit" value="5"></property>
+	</bean>
+
+</beans>
