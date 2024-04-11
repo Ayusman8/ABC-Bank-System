@@ -1,6 +1,8 @@
 package com.abcbankingsystem.models;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Component
 public class Individual extends Customer{
 
-	private String surname;
-	private String gender;
-	private String dateOfBirth;
+	private Gender gender;
+	private LocalDate dateOfBirth;
 }

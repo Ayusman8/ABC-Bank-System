@@ -4,15 +4,19 @@ import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 @Component
-public class Corporate extends Customer{
+public class FullName {
 
-	private String companyType;
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	
+	public String getFullName() {
+		return firstName+" "+middleName+" "+lastName;
+	}
 }

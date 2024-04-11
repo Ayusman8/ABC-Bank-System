@@ -1,35 +1,59 @@
 package com.abcbankingsystem.utilities;
 
-import java.util.Currency;
+import java.time.LocalDate;
 
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.core.io.ClassPathResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.abcbankingsystem.models.Account;
-import com.abcbankingsystem.models.CurrentAccount;
+import com.abcbankingsystem.models.Address;
+import com.abcbankingsystem.models.Customer;
+import com.abcbankingsystem.models.FullName;
 import com.abcbankingsystem.models.SavingsAccount;
+import com.abcbankingsystem.models.Transaction;
 
 public class BankApp {
 
+	private static final Logger logger=LoggerFactory.getLogger(BankApp.class);
+	
 	public static void main(String[] args) {
+
+		// Bean factory
+//		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+//		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+//		reader.loadBeanDefinitions(new ClassPathResource("bank-spring-config.xml"));	
+
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+
+		ctx.register(Account.class);
+		ctx.register(Customer.class);
+		ctx.register(Transaction.class);
+		ctx.register(FullName.class);
+		ctx.register(Address.class);
 		
-		//Bean factory
-		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
-		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
-		reader.loadBeanDefinitions(new ClassPathResource("bank-spring-config.xml"));	
+		ctx.refresh();
+
 		
+		Account account = (Account) ctx.getBean("account");
+		SavingsAccount savings = (SavingsAccount) account;
+		savings.setIntrestRate(8.55f);
+		savings.setOpenDate(LocalDate.of(2024, 4, 11));
+		savings.setRunningTotals(15);		
+		logger.info(savings.getRunningTotals() + "   " + savings.getOpenDate()+" "+savings.getIntrestRate());
 		
-		Account account1 = (Account) factory.getBean("savingsAccount");
-		System.out.println(account1.getRunningTotals()+"   "+ account1.getOpenDate());
-		
-		Account account2 = (Account) factory.getBean("currentAccount");
-		System.out.println(account2.getRunningTotals()+"   "+ account2.getOpenDate());
-		
-		SavingsAccount savings = (SavingsAccount) account1;
-		System.out.println(savings.getIntrestRate());
-		
-		CurrentAccount current = (CurrentAccount) account2;
-		System.out.println(current.getOverDraftLimit());
+		Customer customer = (Customer) ctx.getBean("customer");
+		Address address = customer.getAddress();
+		address.setDoorNo("16");
+		address.setStreetName("First Street");
+		address.setPostalCode(602024);
+		address.setState("Karnataka");
+		address.setCity("Bangalore");
+		address.setCountry("India");
+		address.setLongitude("18.5");
+		address.setLatitude("33.3");
+		logger.info("Customer address-->"+customer.getAddress().getCity());
+
+		ctx.registerShutdownHook();
 	}
 }
